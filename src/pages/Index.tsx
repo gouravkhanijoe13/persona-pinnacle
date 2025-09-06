@@ -4,15 +4,15 @@ import AboutSection from '@/components/AboutSection';
 import BlogSection from '@/components/BlogSection';
 import ContactSection from '@/components/ContactSection';
 import SocialLinks from '@/components/SocialLinks';
+import ParticleBackground from '@/components/ParticleBackground';
 
 const Index = () => {
   useEffect(() => {
-    // Initialize smooth scrolling behavior
+    // Initialize smooth scrolling and animations
     document.documentElement.style.scrollBehavior = 'smooth';
     
-    // Add scroll listener for fade-in animations
     const handleScroll = () => {
-      const elements = document.querySelectorAll('.fade-in:not(.visible)');
+      const elements = document.querySelectorAll('.fade-in-luxury:not(.visible)');
       elements.forEach((element) => {
         const rect = element.getBoundingClientRect();
         const isVisible = rect.top < window.innerHeight * 0.8;
@@ -23,32 +23,35 @@ const Index = () => {
     };
 
     window.addEventListener('scroll', handleScroll);
-    handleScroll(); // Initial check
+    handleScroll();
 
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
-    <main className="min-h-screen">
-      {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 bg-background/80 backdrop-blur-sm border-b border-border z-50">
-        <div className="section-container py-4">
+    <main className="min-h-screen relative">
+      <ParticleBackground />
+      
+      {/* Premium Navigation */}
+      <nav className="fixed top-0 left-0 right-0 navbar-glass z-50">
+        <div className="section-container py-6">
           <div className="flex justify-between items-center">
-            <div className="font-heading font-bold text-xl">
-              <span className="text-gradient">Your Name</span>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl glass-card flex items-center justify-center">
+                <span className="text-lg font-heading font-bold text-gradient">Y</span>
+              </div>
+              <span className="font-heading font-bold text-xl text-gradient">Your Name</span>
             </div>
             <div className="hidden md:flex space-x-8">
-              <a href="#about" className="text-muted-foreground hover:text-primary transition-colors">About</a>
-              <a href="#blog" className="text-muted-foreground hover:text-primary transition-colors">Blog</a>
-              <a href="#contact" className="text-muted-foreground hover:text-primary transition-colors">Contact</a>
+              <a href="#about" className="text-muted-foreground hover:text-gradient transition-colors font-medium">About</a>
+              <a href="#blog" className="text-muted-foreground hover:text-gradient transition-colors font-medium">Blog</a>
+              <a href="#contact" className="text-muted-foreground hover:text-gradient transition-colors font-medium">Contact</a>
             </div>
             <a 
               href="https://calendly.com/your-profile" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="px-6 py-2 bg-primary text-primary-foreground rounded-full text-sm font-medium hover:bg-primary-hover transition-colors"
+              className="btn-secondary text-sm"
             >
               Schedule Meeting
             </a>
@@ -56,7 +59,6 @@ const Index = () => {
         </div>
       </nav>
 
-      {/* Page Sections */}
       <HeroSection />
       <AboutSection />
       <BlogSection />
