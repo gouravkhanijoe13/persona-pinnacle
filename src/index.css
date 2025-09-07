@@ -6,69 +6,69 @@
 
 @layer base {
   :root {
-    /* Base palette - Pure luxury */
-    --background: 0 0% 2%;
-    --foreground: 0 0% 98%;
+    /* Base palette - Dark masculine luxury */
+    --background: 0 0% 4%;
+    --foreground: 0 0% 96%;
     
     /* Glass morphism surfaces */
-    --card: 0 0% 8%;
-    --card-foreground: 0 0% 95%;
-    --glass: 0 0% 100% / 0.03;
-    --glass-border: 0 0% 100% / 0.1;
+    --card: 0 0% 6%;
+    --card-foreground: 0 0% 94%;
+    --glass: 0 0% 100% / 0.02;
+    --glass-border: 0 0% 100% / 0.08;
     
-    --popover: 0 0% 8%;
-    --popover-foreground: 0 0% 95%;
+    --popover: 0 0% 6%;
+    --popover-foreground: 0 0% 94%;
     
-    /* Premium gradient brand colors */
-    --primary: 280 100% 70%;
+    /* Masculine gradient brand colors - Deep teal/cyan */
+    --primary: 187 100% 42%;
     --primary-foreground: 0 0% 100%;
-    --primary-hover: 280 100% 75%;
-    --primary-glow: 280 100% 70%;
+    --primary-hover: 187 100% 50%;
+    --primary-glow: 187 100% 42%;
     
-    /* Luxury secondary palette */
-    --secondary: 240 6% 15%;
-    --secondary-foreground: 0 0% 90%;
-    --secondary-hover: 240 6% 18%;
+    /* Dark luxury secondary palette */
+    --secondary: 210 10% 12%;
+    --secondary-foreground: 0 0% 88%;
+    --secondary-hover: 210 10% 16%;
     
-    /* Sophisticated muted tones */
-    --muted: 240 6% 12%;
-    --muted-foreground: 240 5% 65%;
+    /* Sophisticated dark muted tones */
+    --muted: 210 10% 8%;
+    --muted-foreground: 210 8% 60%;
     
-    /* Premium accent colors */
-    --accent: 45 100% 60%;
-    --accent-foreground: 0 0% 10%;
-    --accent-glow: 45 100% 60%;
+    /* Masculine accent colors - Deep amber */
+    --accent: 25 90% 48%;
+    --accent-foreground: 0 0% 100%;
+    --accent-glow: 25 90% 48%;
     
     /* Status colors */
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
     
     /* Refined borders and inputs */
-    --border: 240 6% 20%;
-    --input: 240 6% 8%;
-    --ring: 280 100% 70%;
+    --border: 210 10% 18%;
+    --input: 210 10% 6%;
+    --ring: 187 100% 42%;
     
-    /* Advanced brand tokens */
-    --gradient-primary: linear-gradient(135deg, hsl(280 100% 70%), hsl(320 100% 65%), hsl(260 100% 75%));
-    --gradient-secondary: linear-gradient(135deg, hsl(240 6% 15%), hsl(240 6% 25%));
-    --gradient-accent: linear-gradient(135deg, hsl(45 100% 60%), hsl(35 100% 65%));
-    --gradient-background: radial-gradient(ellipse at top, hsl(280 100% 5%), hsl(0 0% 2%));
-    --gradient-hero: linear-gradient(135deg, hsl(280 100% 10%), hsl(320 100% 8%), hsl(260 100% 12%));
-    --gradient-glass: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+    /* Advanced masculine brand tokens */
+    --gradient-primary: linear-gradient(135deg, hsl(187 100% 42%), hsl(195 100% 38%), hsl(180 100% 45%));
+    --gradient-secondary: linear-gradient(135deg, hsl(210 10% 12%), hsl(210 10% 20%));
+    --gradient-accent: linear-gradient(135deg, hsl(25 90% 48%), hsl(20 90% 52%));
+    --gradient-background: radial-gradient(ellipse at top, hsl(187 50% 6%), hsl(0 0% 4%));
+    --gradient-hero: linear-gradient(135deg, hsl(187 40% 8%), hsl(195 40% 6%), hsl(180 40% 10%));
+    --gradient-glass: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
     
-    /* Glow effects */
-    --glow-primary: 0 0 60px hsl(280 100% 70% / 0.3);
-    --glow-accent: 0 0 40px hsl(45 100% 60% / 0.2);
-    --glow-soft: 0 0 100px hsl(280 100% 70% / 0.1);
+    /* Masculine glow effects */
+    --glow-primary: 0 0 60px hsl(187 100% 42% / 0.4);
+    --glow-accent: 0 0 40px hsl(25 90% 48% / 0.3);
+    --glow-soft: 0 0 100px hsl(187 100% 42% / 0.15);
     
     /* Advanced shadows */
-    --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1);
-    --shadow-premium: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.05);
-    --shadow-floating: 0 25px 80px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.08);
+    --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.08);
+    --shadow-premium: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.04);
+    --shadow-floating: 0 25px 80px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.06);
     
     /* Typography scale */
-    --text-gradient: linear-gradient(135deg, hsl(280 100% 85%), hsl(320 100% 80%), hsl(45 100% 70%));
-    --text-glow: 0 0 20px hsl(280 100% 70% / 0.5);
+    --text-gradient: linear-gradient(135deg, hsl(187 100% 70%), hsl(195 100% 65%), hsl(25 90% 60%));
+    --text-glow: 0 0 20px hsl(187 100% 42% / 0.6);
     
     /* Spacing & Sizing */
     --section-spacing: 8rem;
