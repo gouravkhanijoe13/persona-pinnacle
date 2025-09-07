@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Mail, MessageCircle, Calendar, Send, Phone, MapPin, Sparkles } from 'lucide-react';
+import { useSiteSettings } from '@/hooks/useSiteSettings';
 
 const ContactSection = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -9,6 +10,7 @@ const ContactSection = () => {
     message: ''
   });
   const sectionRef = useRef<HTMLElement>(null);
+  const { settings: contactSettings, loading } = useSiteSettings('contact');
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -28,141 +30,114 @@ const ContactSection = () => {
   }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission here
     console.log('Form submitted:', formData);
+    // Handle form submission here
   };
 
-  const contactMethods = [
-    {
-      icon: Calendar,
-      title: "Schedule a Meeting",
-      description: "Book a time that works for both of us",
-      action: "Schedule Now",
-      highlight: true
-    },
-    {
-      icon: Mail,
-      title: "Send an Email",
-      description: "your.email@example.com",
-      action: "Send Email",
-      highlight: false
-    },
-    {
-      icon: Phone,
-      title: "Quick Call",
-      description: "+1 (555) 123-4567",
-      action: "Call Now",
-      highlight: false
-    },
-    {
-      icon: MapPin,
-      title: "Location",
-      description: "Your City, Country",
-      action: "View Location",
-      highlight: false
-    }
-  ];
+  // Default values
+  const defaultSettings = {
+    title: "Connect With Me",
+    subtitle: "Let's collaborate",
+    methods: [
+      {
+        title: "Schedule a Meeting",
+        description: "Book a consultation to discuss your project requirements and explore how we can work together.",
+        action: "Schedule Now",
+        highlight: true
+      },
+      {
+        title: "Send an Email", 
+        description: "Drop me a line with your project details and I'll get back to you within 24 hours.",
+        action: "Send Email",
+        highlight: false
+      }
+    ]
+  };
+
+  const settings = contactSettings || defaultSettings;
+
+  if (loading) {
+    return (
+      <section className="py-24 relative bg-gradient-to-b from-primary/5 to-background">
+        <div className="section-container">
+          <div className="animate-pulse text-primary text-center">Loading contact section...</div>
+        </div>
+      </section>
+    );
+  }
 
   return (
-    <section 
-      ref={sectionRef}
-      className="section-spacing relative overflow-hidden"
-      id="contact"
-    >
+    <section ref={sectionRef} id="contact" className="py-24 relative bg-gradient-to-b from-primary/5 to-background overflow-hidden">
       {/* Background Elements */}
-      <div className="absolute inset-0 opacity-30">
-        <div className="absolute top-20 left-20 w-96 h-96 rounded-full blur-3xl opacity-20" style={{ background: 'var(--gradient-accent)' }}></div>
-        <div className="absolute bottom-20 right-20 w-80 h-80 rounded-full blur-3xl opacity-25" style={{ background: 'var(--gradient-primary)' }}></div>
+      <div className="absolute top-20 left-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-0 right-0 w-64 h-64 bg-accent/10 rounded-full blur-3xl"></div>
+      <div className="absolute top-1/2 right-20 text-accent/5">
+        <Sparkles className="h-24 w-24" />
       </div>
-
+      
       <div className="section-container relative z-10">
         <div className={`fade-in-luxury ${isVisible ? 'visible' : ''}`}>
-          {/* Premium Section Header */}
-          <div className="text-center mb-20">
-            <div className="flex items-center justify-center gap-3 mb-6">
-              <Sparkles className="w-8 h-8 text-accent-glow" />
-              <div className="text-sm font-medium text-accent-glow tracking-widest uppercase">Let's collaborate</div>
-            </div>
-            <h2 className="text-5xl md:text-7xl font-heading font-bold mb-8">
-              Connect <span className="text-gradient text-glow">With Me</span>
+          
+          {/* Section Header */}
+          <div className="text-center mb-16">
+            <div className="text-lg text-accent font-medium mb-4">{settings.subtitle}</div>
+            <h2 className="text-5xl font-bold mb-6 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+              {settings.title}
             </h2>
-            <div className="w-32 h-1 mx-auto rounded-full mb-8" style={{ background: 'var(--gradient-primary)' }}></div>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-              Feel free to reach out for collaborations, questions, or inquiries. Let's create something amazing together!
-            </p>
+            <div className="w-24 h-1 bg-gradient-to-r from-primary to-accent mx-auto rounded-full"></div>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-20 items-start">
-            {/* Enhanced Contact Options */}
-            <div className="space-y-8">
-              <div className="glass-premium p-8 rounded-3xl">
-                <h3 className="text-3xl font-heading font-semibold mb-6 text-gradient">Let's Start a Conversation</h3>
-                <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-                  Choose the best way to reach out, and I'll get back to you as soon as possible. 
-                  I'm always excited to discuss new opportunities and creative projects.
-                </p>
-
-                {/* Contact Methods Grid */}
-                <div className="space-y-4">
-                  {contactMethods.map((method, index) => (
-                    <div 
-                      key={index}
-                      className={`glass-card rounded-2xl hover-luxury group cursor-pointer transition-all duration-500 ${
-                        method.highlight ? 'ring-2 ring-primary/30' : ''
-                      }`}
-                    >
-                      <div className="flex items-center space-x-6 p-6">
-                        <div className={`w-16 h-16 rounded-2xl flex items-center justify-center transition-all duration-300 ${
-                          method.highlight 
-                            ? 'bg-primary text-primary-foreground group-hover:scale-110' 
-                            : 'glass-card group-hover:bg-primary group-hover:text-primary-foreground'
-                        }`}>
-                          <method.icon className="w-7 h-7" />
-                        </div>
-                        <div className="flex-1">
-                          <h4 className="font-heading font-semibold text-lg mb-1 group-hover:text-gradient transition-colors">
-                            {method.title}
-                          </h4>
-                          <p className="text-muted-foreground text-sm mb-2">{method.description}</p>
-                          <span className="text-primary text-sm font-medium">{method.action}</span>
-                        </div>
+          {/* Main Content Grid */}
+          <div className="grid lg:grid-cols-2 gap-16">
+            
+            {/* Left Column - Contact Options */}
+            <div>
+              <h3 className="text-2xl font-semibold mb-8 text-primary">Enhanced Contact Options</h3>
+              
+              <div className="space-y-6 mb-8">
+                {settings.methods.map((method, index) => (
+                  <div key={index} className={`glass-card p-6 hover:shadow-elegant transition-all duration-300 group ${method.highlight ? 'border-primary/20' : ''}`}>
+                    <div className="flex items-start gap-4">
+                      <div className={`w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 ${method.highlight ? 'bg-primary/20' : 'bg-accent/20'}`}>
+                        {index === 0 ? (
+                          <Calendar className={`h-6 w-6 ${method.highlight ? 'text-primary' : 'text-accent'}`} />
+                        ) : (
+                          <Mail className={`h-6 w-6 ${method.highlight ? 'text-primary' : 'text-accent'}`} />
+                        )}
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="text-lg font-semibold mb-2 text-foreground">{method.title}</h4>
+                        <p className="text-muted-foreground text-sm mb-4 leading-relaxed">{method.description}</p>
+                        <button className={`text-sm font-medium ${method.highlight ? 'text-primary hover:text-primary/80' : 'text-accent hover:text-accent/80'} transition-colors group-hover:underline`}>
+                          {method.action} →
+                        </button>
                       </div>
                     </div>
-                  ))}
-                </div>
-
-                {/* Primary CTA */}
-                <div className="mt-8">
-                  <button className="btn-luxury w-full group">
-                    <Calendar className="w-5 h-5 mr-3 group-hover:rotate-12 transition-transform" />
-                    Schedule a Meeting
-                    <Sparkles className="w-5 h-5 ml-3 group-hover:scale-110 transition-transform" />
-                  </button>
-                </div>
+                  </div>
+                ))}
               </div>
+
+              <button className="btn-primary w-full group">
+                <Calendar className="mr-2 h-5 w-5" />
+                Schedule a Meeting
+                <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-primary to-accent opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+              </button>
             </div>
 
-            {/* Premium Contact Form */}
-            <div className="glass-premium p-10 rounded-3xl hover-luxury">
-              <div className="mb-8">
-                <h3 className="text-2xl font-heading font-bold mb-4 text-gradient">Quick Message</h3>
-                <p className="text-muted-foreground">
-                  Send me a message and I'll respond within 24 hours
-                </p>
-              </div>
-
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid sm:grid-cols-2 gap-6">
+            {/* Right Column - Contact Form */}
+            <div>
+              <div className="glass-premium p-8">
+                <h3 className="text-2xl font-semibold mb-8 text-accent">Premium Contact Form</h3>
+                
+                <form onSubmit={handleSubmit} className="space-y-6">
                   <div>
-                    <label htmlFor="name" className="block text-sm font-medium mb-3 text-foreground">
+                    <label htmlFor="name" className="block text-sm font-medium text-foreground mb-2">
                       Full Name
                     </label>
                     <input
@@ -171,14 +146,14 @@ const ContactSection = () => {
                       name="name"
                       value={formData.name}
                       onChange={handleInputChange}
-                      className="w-full px-6 py-4 glass-card border border-glass-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all bg-transparent text-foreground placeholder-muted-foreground"
-                      placeholder="Your full name"
+                      className="input-luxury"
+                      placeholder="Enter your full name"
                       required
                     />
                   </div>
-
+                  
                   <div>
-                    <label htmlFor="email" className="block text-sm font-medium mb-3 text-foreground">
+                    <label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">
                       Email Address
                     </label>
                     <input
@@ -187,38 +162,48 @@ const ContactSection = () => {
                       name="email"
                       value={formData.email}
                       onChange={handleInputChange}
-                      className="w-full px-6 py-4 glass-card border border-glass-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all bg-transparent text-foreground placeholder-muted-foreground"
-                      placeholder="your.email@example.com"
+                      className="input-luxury"
+                      placeholder="Enter your email address"
                       required
                     />
                   </div>
-                </div>
+                  
+                  <div>
+                    <label htmlFor="message" className="block text-sm font-medium text-foreground mb-2">
+                      Project Details
+                    </label>
+                    <textarea
+                      id="message"
+                      name="message"
+                      rows={6}
+                      value={formData.message}
+                      onChange={handleInputChange}
+                      className="input-luxury resize-none"
+                      placeholder="Tell me about your project requirements, timeline, and any specific needs..."
+                      required
+                    />
+                  </div>
+                  
+                  <button type="submit" className="btn-secondary w-full group">
+                    <Send className="mr-2 h-5 w-5 transform group-hover:translate-x-1 transition-transform" />
+                    Send Message
+                  </button>
+                </form>
 
-                <div>
-                  <label htmlFor="message" className="block text-sm font-medium mb-3 text-foreground">
-                    Message
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    value={formData.message}
-                    onChange={handleInputChange}
-                    rows={6}
-                    className="w-full px-6 py-4 glass-card border border-glass-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all resize-none bg-transparent text-foreground placeholder-muted-foreground"
-                    placeholder="Tell me about your project or inquiry..."
-                    required
-                  />
+                {/* Additional Contact Info */}
+                <div className="mt-8 pt-8 border-t border-border/50">
+                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                    <div className="flex items-center gap-2">
+                      <Phone className="h-4 w-4 text-primary" />
+                      <span>+1 (555) 123-4567</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <MapPin className="h-4 w-4 text-accent" />
+                      <span>San Francisco, CA</span>
+                    </div>
+                  </div>
                 </div>
-
-                <button
-                  type="submit"
-                  className="w-full btn-luxury group"
-                >
-                  <Send className="w-5 h-5 mr-3 group-hover:translate-x-1 transition-transform" />
-                  Send Message
-                  <MessageCircle className="w-5 h-5 ml-3 group-hover:scale-110 transition-transform" />
-                </button>
-              </form>
+              </div>
             </div>
           </div>
         </div>

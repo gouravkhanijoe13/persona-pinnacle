@@ -1,114 +1,130 @@
 import { useState, useEffect } from 'react';
 import { ArrowDown, Sparkles, Star } from 'lucide-react';
 import profileImage from '@/assets/profile-placeholder.jpg';
+import { useSiteSettings } from '@/hooks/useSiteSettings';
 
 const HeroSection = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const { settings: heroSettings, loading } = useSiteSettings('hero');
 
   useEffect(() => {
     const timer = setTimeout(() => setIsVisible(true), 100);
     return () => clearTimeout(timer);
   }, []);
 
+  // Default values to prevent undefined errors
+  const defaultSettings = {
+    name: "Alex Thompson",
+    title: "Senior Full Stack Developer",
+    subtitle: "Crafting exceptional digital experiences with cutting-edge technology and premium design",
+    stats: {
+      experience: "8+",
+      projects: "150+",
+      clients: "50+",
+      availability: "Available"
+    }
+  };
+
+  const settings = heroSettings || defaultSettings;
+
+  if (loading) {
+    return (
+      <section className="min-h-screen relative flex items-center justify-center bg-gradient-to-br from-background via-background/95 to-primary/5">
+        <div className="animate-pulse text-primary">Loading...</div>
+      </section>
+    );
+  }
+
   return (
     <section className="min-h-screen flex items-center justify-center relative overflow-hidden">
       {/* Hero Background */}
-      <div className="absolute inset-0 opacity-60">
-        <div className="absolute inset-0" style={{ background: 'var(--gradient-hero)' }}></div>
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full opacity-20 blur-3xl" style={{ background: 'var(--gradient-primary)' }}></div>
-        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full opacity-15 blur-3xl" style={{ background: 'var(--gradient-accent)' }}></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-background via-background/95 to-primary/5" />
+      
+      {/* Decorative Elements */}
+      <div className="absolute top-20 left-20 text-primary/20">
+        <Star className="h-12 w-12 animate-float-slow" />
+      </div>
+      <div className="absolute bottom-20 right-20 text-accent/20">
+        <Sparkles className="h-16 w-16 animate-float-delayed" />
+      </div>
+      <div className="absolute top-1/2 left-10 text-primary/10">
+        <Star className="h-8 w-8 animate-float" />
+      </div>
+      <div className="absolute top-1/3 right-10 text-accent/10">
+        <Sparkles className="h-10 w-10 animate-float-slow" />
       </div>
 
       <div className="section-container relative z-10">
-        <div className={`text-center fade-in-luxury ${isVisible ? 'visible' : ''}`}>
-          {/* Floating decorative elements */}
-          <div className="absolute top-20 left-20 floating">
-            <Star className="w-8 h-8 text-accent opacity-60" />
-          </div>
-          <div className="absolute top-40 right-32 floating" style={{ animationDelay: '2s' }}>
-            <Sparkles className="w-6 h-6 text-primary opacity-40" />
-          </div>
-          <div className="absolute bottom-32 left-40 floating" style={{ animationDelay: '4s' }}>
-            <Star className="w-4 h-4 text-accent opacity-30" />
-          </div>
-
-          {/* Profile Image with Premium Effects */}
-          <div className="mb-12 flex justify-center">
-            <div className="relative">
-              <div className="profile-luxury">
-                <img
-                  src={profileImage}
-                  alt="Your Name - Profile"
-                  className="w-48 h-48 rounded-full object-cover relative z-20"
-                />
+        <div className={`fade-in-luxury ${isVisible ? 'visible' : ''}`}>
+          <div className="text-center">
+            
+            {/* Profile Image with Premium Styling */}
+            <div className="relative inline-block mb-8 group">
+              <div className="absolute -inset-1 bg-gradient-to-r from-primary to-accent rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
+              <div className="relative">
+                <div className="w-48 h-48 mx-auto rounded-full overflow-hidden border-4 border-white/20 shadow-elegant bg-gradient-to-br from-primary/20 to-accent/20">
+                  <img 
+                    src={profileImage} 
+                    alt="Professional headshot" 
+                    className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+                <div className="absolute inset-0 rounded-full shadow-glow opacity-50"></div>
               </div>
-              {/* Additional glow layers */}
-              <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-primary/30 to-accent/20 blur-xl"></div>
-              <div className="absolute top-2 left-2 w-8 h-8 bg-accent rounded-full opacity-80 blur-sm"></div>
-              <div className="absolute bottom-4 right-6 w-6 h-6 bg-primary rounded-full opacity-60 blur-sm"></div>
             </div>
-          </div>
 
-          {/* Main Heading with Advanced Typography */}
-          <div className="mb-8 space-y-4">
-            <div className="text-lg font-medium text-muted-foreground mb-2 tracking-wider uppercase opacity-80">
-              Welcome to my digital space
-            </div>
-            <h1 className="text-6xl md:text-8xl font-heading font-bold mb-6 leading-tight">
-              Hey there, I'm{' '}
-              <span className="text-gradient text-glow">Your Name</span>
+            {/* Main Content */}
+            <h1 className="text-6xl md:text-7xl font-bold mb-6 leading-tight">
+              <span className="bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent animate-pulse">
+                {settings.name}
+              </span>
             </h1>
-          </div>
-
-          {/* Enhanced Subtitle */}
-          <div className="mb-12 max-w-4xl mx-auto">
-            <p className="text-2xl md:text-3xl text-muted-foreground mb-6 font-body leading-relaxed">
-              A <span className="text-gradient font-semibold">Your Profession</span> with a passion for{' '}
-              <span className="text-gradient font-semibold">Your Focus/Area of Expertise</span>
+            
+            <div className="text-2xl md:text-3xl font-light mb-8 text-accent">
+              {settings.title}
+            </div>
+            
+            <p className="text-lg md:text-xl text-muted-foreground mb-12 max-w-2xl leading-relaxed">
+              {settings.subtitle}
             </p>
-            <p className="text-lg text-muted-foreground/80 max-w-2xl mx-auto">
-              Crafting digital experiences that inspire, innovate, and transform ideas into reality
-            </p>
-          </div>
 
-          {/* Premium CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
-            <button className="btn-luxury hover-glow group">
-              <Sparkles className="w-5 h-5 mr-3 group-hover:rotate-12 transition-transform" />
-              Schedule a Meeting
-            </button>
-            <button className="btn-secondary hover-luxury">
-              View My Work
-            </button>
-          </div>
+            {/* Call to Action Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+              <button className="btn-primary group">
+                Schedule a Meeting
+                <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-primary to-accent opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+              </button>
+              <button className="btn-secondary">
+                View My Work
+              </button>
+            </div>
 
-          {/* Enhanced Stats Display */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-20 max-w-3xl mx-auto">
-            <div className="glass-card p-6 rounded-2xl hover-luxury">
-              <div className="text-3xl font-heading font-bold text-gradient mb-2">5+</div>
-              <div className="text-sm text-muted-foreground uppercase tracking-wide">Years Experience</div>
-            </div>
-            <div className="glass-card p-6 rounded-2xl hover-luxury">
-              <div className="text-3xl font-heading font-bold text-gradient mb-2">100+</div>
-              <div className="text-sm text-muted-foreground uppercase tracking-wide">Projects Done</div>
-            </div>
-            <div className="glass-card p-6 rounded-2xl hover-luxury">
-              <div className="text-3xl font-heading font-bold text-gradient mb-2">50+</div>
-              <div className="text-sm text-muted-foreground uppercase tracking-wide">Happy Clients</div>
-            </div>
-            <div className="glass-card p-6 rounded-2xl hover-luxury">
-              <div className="text-3xl font-heading font-bold text-gradient mb-2">24/7</div>
-              <div className="text-sm text-muted-foreground uppercase tracking-wide">Available</div>
+            {/* Statistics Grid */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              <div className="glass-card text-center p-4">
+                <div className="text-2xl font-bold text-primary mb-1">{settings.stats.experience}</div>
+                <div className="text-sm text-muted-foreground">Years Experience</div>
+              </div>
+              <div className="glass-card text-center p-4">
+                <div className="text-2xl font-bold text-accent mb-1">{settings.stats.projects}</div>
+                <div className="text-sm text-muted-foreground">Projects Completed</div>
+              </div>
+              <div className="glass-card text-center p-4">
+                <div className="text-2xl font-bold text-primary mb-1">{settings.stats.clients}</div>
+                <div className="text-sm text-muted-foreground">Happy Clients</div>
+              </div>
+              <div className="glass-card text-center p-4">
+                <div className="text-2xl font-bold text-accent mb-1">{settings.stats.availability}</div>
+                <div className="text-sm text-muted-foreground">Support Available</div>
+              </div>
             </div>
           </div>
+        </div>
 
-          {/* Animated Scroll Indicator */}
-          <div className="mt-16 animate-bounce">
-            <div className="mx-auto w-8 h-16 border-2 border-glass-border rounded-full flex justify-center glass-card">
-              <ArrowDown className="w-4 h-4 text-muted-foreground mt-4" />
-            </div>
-            <p className="text-xs text-muted-foreground mt-4 uppercase tracking-wider">Scroll to explore</p>
-          </div>
+        {/* Scroll Indicator */}
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-center animate-bounce">
+          <ArrowDown className="h-6 w-6 text-primary mx-auto mb-2" />
+          <div className="text-sm text-muted-foreground">Scroll to explore</div>
         </div>
       </div>
     </section>

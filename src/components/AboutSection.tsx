@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { Target, Award, Users, Clock, ArrowRight } from 'lucide-react';
+import { useSiteSettings } from '@/hooks/useSiteSettings';
 
 const AboutSection = () => {
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
+  const { settings: aboutSettings, loading } = useSiteSettings('about');
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -22,145 +24,149 @@ const AboutSection = () => {
     return () => observer.disconnect();
   }, []);
 
-  const expertise = [
-    {
-      icon: Target,
-      title: "Strategic Vision",
-      description: "Turning complex challenges into elegant solutions through strategic thinking and innovative approaches."
-    },
-    {
-      icon: Award,
-      title: "Premium Quality",
-      description: "Delivering excellence in every project with attention to detail and commitment to perfection."
-    },
-    {
-      icon: Users,
-      title: "Client Focus",
-      description: "Building lasting partnerships through collaboration, communication, and exceptional service."
-    },
-    {
-      icon: Clock,
-      title: "Timely Delivery",
-      description: "Meeting deadlines while maintaining the highest standards of quality and professionalism."
-    }
-  ];
+  // Default values
+  const defaultSettings = {
+    title: "About Me",
+    story: "With over 8 years of experience in full-stack development, I specialize in creating robust, scalable applications that drive business growth. My passion lies in transforming complex ideas into elegant, user-friendly solutions.",
+    mission: "To deliver exceptional software solutions that exceed expectations and drive measurable results.",
+    values: "Quality, innovation, and client satisfaction are at the core of everything I do.",
+    expertise: [
+      {
+        title: "Full-Stack Development",
+        description: "End-to-end application development with modern frameworks and technologies."
+      },
+      {
+        title: "Cloud Architecture", 
+        description: "Scalable cloud solutions using AWS, Azure, and Google Cloud Platform."
+      },
+      {
+        title: "DevOps & Automation",
+        description: "CI/CD pipelines, containerization, and infrastructure automation."
+      },
+      {
+        title: "Performance Optimization",
+        description: "Advanced techniques for optimizing application speed and efficiency."
+      }
+    ]
+  };
+
+  const settings = aboutSettings || defaultSettings;
+
+  if (loading) {
+    return (
+      <section className="py-24 relative bg-gradient-to-b from-background/50 to-primary/5">
+        <div className="section-container">
+          <div className="animate-pulse text-primary text-center">Loading about section...</div>
+        </div>
+      </section>
+    );
+  }
 
   return (
-    <section 
-      ref={sectionRef}
-      className="section-spacing relative overflow-hidden"
-      id="about"
-    >
+    <section ref={sectionRef} id="about" className="py-24 relative bg-gradient-to-b from-background/50 to-primary/5">
       {/* Background Elements */}
-      <div className="absolute inset-0 opacity-30">
-        <div className="absolute top-20 right-20 w-72 h-72 rounded-full blur-3xl opacity-20" style={{ background: 'var(--gradient-accent)' }}></div>
-        <div className="absolute bottom-20 left-20 w-80 h-80 rounded-full blur-3xl opacity-15" style={{ background: 'var(--gradient-primary)' }}></div>
-      </div>
-
+      <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-transparent to-primary/10 blur-3xl"></div>
+      <div className="absolute bottom-0 right-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl"></div>
+      
       <div className="section-container relative z-10">
         <div className={`fade-in-luxury ${isVisible ? 'visible' : ''}`}>
-          {/* Premium Section Header */}
-          <div className="text-center mb-20">
-            <div className="text-sm font-medium text-accent-glow mb-4 tracking-widest uppercase">Get to know me</div>
-            <h2 className="text-5xl md:text-7xl font-heading font-bold mb-8">
-              About <span className="text-gradient text-glow">Me</span>
+          
+          {/* Section Header */}
+          <div className="text-center mb-16">
+            <h2 className="text-5xl font-bold mb-6 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+              {settings.title}
             </h2>
-            <div className="w-32 h-1 mx-auto rounded-full" style={{ background: 'var(--gradient-primary)' }}></div>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto mt-8 leading-relaxed">
-              Passionate about creating digital experiences that make a difference
-            </p>
+            <div className="w-24 h-1 bg-gradient-to-r from-primary to-accent mx-auto rounded-full"></div>
           </div>
 
-          {/* Content Grid with Glass Cards */}
-          <div className="grid lg:grid-cols-2 gap-20 items-center mb-20">
-            {/* Enhanced Text Content */}
+          {/* Main Content Grid */}
+          <div className="grid lg:grid-cols-2 gap-16 mb-20">
+            
+            {/* Left Column - Story */}
             <div className="space-y-8">
-              <div className="glass-premium p-8 rounded-3xl hover-luxury">
-                <h3 className="text-2xl font-heading font-bold mb-6 text-gradient">My Story</h3>
-                <div className="space-y-6 text-lg leading-relaxed">
-                  <p className="text-muted-foreground">
-                    I specialize in <span className="text-gradient font-semibold">specific expertise or services you offer</span> and aim to{' '}
-                    <span className="text-gradient font-semibold">short mission statement</span>.
-                  </p>
+              <div className="glass-premium p-8">
+                <h3 className="text-2xl font-semibold mb-6 text-primary">My Story</h3>
+                <p className="text-muted-foreground leading-relaxed mb-8">
+                  {settings.story}
+                </p>
+                
+                <div className="space-y-6">
+                  <div className="flex items-start gap-4">
+                    <div className="w-2 h-2 bg-primary rounded-full mt-3 flex-shrink-0"></div>
+                    <div>
+                      <h4 className="font-semibold text-foreground mb-2">Expertise</h4>
+                      <p className="text-muted-foreground text-sm">Comprehensive full-stack development across modern technology stacks</p>
+                    </div>
+                  </div>
                   
-                  <p className="text-muted-foreground">
-                    With a background in [your field], I bring a unique perspective to every project. 
-                    My approach combines technical expertise with creative problem-solving to deliver 
-                    exceptional results that exceed expectations.
-                  </p>
-                </div>
-
-                {/* Enhanced Key Points */}
-                <div className="space-y-4 mt-8">
-                  <div className="flex items-start space-x-4 group">
-                    <div className="w-3 h-3 rounded-full mt-3 flex-shrink-0 group-hover:scale-125 transition-transform" style={{ background: 'var(--gradient-primary)' }}></div>
-                    <p className="text-muted-foreground group-hover:text-foreground transition-colors">
-                      <span className="text-gradient font-semibold">Expertise:</span> Your specific area of expertise and skills
-                    </p>
+                  <div className="flex items-start gap-4">
+                    <div className="w-2 h-2 bg-accent rounded-full mt-3 flex-shrink-0"></div>
+                    <div>
+                      <h4 className="font-semibold text-foreground mb-2">Mission</h4>
+                      <p className="text-muted-foreground text-sm">{settings.mission}</p>
+                    </div>
                   </div>
-                  <div className="flex items-start space-x-4 group">
-                    <div className="w-3 h-3 rounded-full mt-3 flex-shrink-0 group-hover:scale-125 transition-transform" style={{ background: 'var(--gradient-accent)' }}></div>
-                    <p className="text-muted-foreground group-hover:text-foreground transition-colors">
-                      <span className="text-gradient font-semibold">Mission:</span> Helping clients achieve their goals through innovative solutions
-                    </p>
-                  </div>
-                  <div className="flex items-start space-x-4 group">
-                    <div className="w-3 h-3 rounded-full mt-3 flex-shrink-0 group-hover:scale-125 transition-transform" style={{ background: 'var(--gradient-primary)' }}></div>
-                    <p className="text-muted-foreground group-hover:text-foreground transition-colors">
-                      <span className="text-gradient font-semibold">Values:</span> Quality, innovation, and client satisfaction
-                    </p>
+                  
+                  <div className="flex items-start gap-4">
+                    <div className="w-2 h-2 bg-primary rounded-full mt-3 flex-shrink-0"></div>
+                    <div>
+                      <h4 className="font-semibold text-foreground mb-2">Values</h4>
+                      <p className="text-muted-foreground text-sm">{settings.values}</p>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Enhanced Stats Grid */}
+            {/* Right Column - Stats */}
             <div className="grid grid-cols-2 gap-6">
-              <div className="glass-premium p-8 rounded-3xl text-center hover-luxury group">
-                <div className="text-4xl font-heading font-bold text-gradient mb-3 group-hover:scale-110 transition-transform">5+</div>
-                <div className="text-muted-foreground text-sm uppercase tracking-wide">Years Experience</div>
+              <div className="glass-card text-center p-6 hover:scale-105 transition-transform duration-300">
+                <Target className="h-12 w-12 text-primary mx-auto mb-4" />
+                <div className="text-3xl font-bold text-primary mb-2">8+</div>
+                <div className="text-muted-foreground text-sm">Years Experience</div>
               </div>
-              <div className="glass-premium p-8 rounded-3xl text-center hover-luxury group">
-                <div className="text-4xl font-heading font-bold text-gradient mb-3 group-hover:scale-110 transition-transform">100+</div>
-                <div className="text-muted-foreground text-sm uppercase tracking-wide">Projects Completed</div>
+              
+              <div className="glass-card text-center p-6 hover:scale-105 transition-transform duration-300">
+                <Award className="h-12 w-12 text-accent mx-auto mb-4" />
+                <div className="text-3xl font-bold text-accent mb-2">150+</div>
+                <div className="text-muted-foreground text-sm">Projects Completed</div>
               </div>
-              <div className="glass-premium p-8 rounded-3xl text-center hover-luxury group">
-                <div className="text-4xl font-heading font-bold text-gradient mb-3 group-hover:scale-110 transition-transform">50+</div>
-                <div className="text-muted-foreground text-sm uppercase tracking-wide">Happy Clients</div>
+              
+              <div className="glass-card text-center p-6 hover:scale-105 transition-transform duration-300">
+                <Users className="h-12 w-12 text-primary mx-auto mb-4" />
+                <div className="text-3xl font-bold text-primary mb-2">50+</div>
+                <div className="text-muted-foreground text-sm">Happy Clients</div>
               </div>
-              <div className="glass-premium p-8 rounded-3xl text-center hover-luxury group">
-                <div className="text-4xl font-heading font-bold text-gradient mb-3 group-hover:scale-110 transition-transform">24/7</div>
-                <div className="text-muted-foreground text-sm uppercase tracking-wide">Support Available</div>
+              
+              <div className="glass-card text-center p-6 hover:scale-105 transition-transform duration-300">
+                <Clock className="h-12 w-12 text-accent mx-auto mb-4" />
+                <div className="text-3xl font-bold text-accent mb-2">24/7</div>
+                <div className="text-muted-foreground text-sm">Support Available</div>
               </div>
             </div>
           </div>
 
           {/* Expertise Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {expertise.map((item, index) => (
-              <div 
-                key={index}
-                className="glass-card p-8 rounded-3xl hover-luxury group text-center"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                <div className="w-16 h-16 mx-auto mb-6 rounded-2xl glass-premium flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <item.icon className="w-8 h-8 text-gradient" />
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            {settings.expertise.map((item, index) => (
+              <div key={index} className="glass-card p-6 hover:shadow-elegant transition-all duration-300 group">
+                <div className="h-16 w-16 bg-gradient-to-br from-primary/20 to-accent/20 rounded-lg mb-4 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                  {index === 0 && <Target className="h-8 w-8 text-primary" />}
+                  {index === 1 && <Award className="h-8 w-8 text-accent" />}
+                  {index === 2 && <Users className="h-8 w-8 text-primary" />}
+                  {index === 3 && <Clock className="h-8 w-8 text-accent" />}
                 </div>
-                <h4 className="text-xl font-heading font-semibold mb-4 group-hover:text-gradient transition-colors">
-                  {item.title}
-                </h4>
-                <p className="text-muted-foreground text-sm leading-relaxed">
-                  {item.description}
-                </p>
+                <h4 className="text-lg font-semibold mb-3 text-foreground">{item.title}</h4>
+                <p className="text-muted-foreground text-sm leading-relaxed">{item.description}</p>
               </div>
             ))}
           </div>
 
           {/* Call to Action */}
-          <div className="text-center mt-16">
-            <button className="btn-luxury hover-glow group">
+          <div className="text-center">
+            <button className="btn-primary group">
               Let's Work Together
-              <ArrowRight className="w-5 h-5 ml-3 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="ml-2 h-5 w-5 transform group-hover:translate-x-1 transition-transform" />
             </button>
           </div>
         </div>
