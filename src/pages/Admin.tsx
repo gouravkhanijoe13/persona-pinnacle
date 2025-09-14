@@ -16,7 +16,7 @@ const Admin: React.FC = () => {
   const { user, isAdmin, signOut, loading } = useAuth();
   const { toast } = useToast();
   const [saving, setSaving] = useState(false);
-  const [loadingSettings, setLoadingSettings] = useState(true);
+  const [loadingSettings, setLoadingSettings] = useState(false);
 
   const [heroSettings, setHeroSettings] = useState({
     name: '',
@@ -54,6 +54,7 @@ const Admin: React.FC = () => {
 
   useEffect(() => {
     if (user && isAdmin) {
+      setLoadingSettings(true);
       loadSettings();
     }
   }, [user, isAdmin]);
@@ -125,7 +126,7 @@ const Admin: React.FC = () => {
     await signOut();
   };
 
-  if (loading || loadingSettings) {
+  if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -135,6 +136,14 @@ const Admin: React.FC = () => {
 
   if (!user || !isAdmin) {
     return <Navigate to="/auth" replace />;
+  }
+
+  if (loadingSettings) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
   }
 
   return (
